@@ -1,0 +1,33 @@
+# ── Binarios y archivos grandes ──────────────────────────────
+*.tar.gz
+*.zip
+*.deb
+*.AppImage
+
+# ── Fuentes (se descargan automáticamente) ───────────────────
+fonts/
+
+# ── Cursores e iconos (se descargan automáticamente) ─────────
+themes/cursors/
+themes/icons/
+
+# ── Wallpaper (personal) ─────────────────────────────────────
+wallpapers/wallpaper.png
+
+# ── Secrets y tokens ─────────────────────────────────────────
+shell/zshrc.local
+.env
+*.token
+*.secret
+
+# ── Cache y temporales ───────────────────────────────────────
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+__pycache__/
+*.pyc
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log

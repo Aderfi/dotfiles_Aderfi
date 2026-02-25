@@ -1,0 +1,6 @@
+{
+    "hyprland/window": {
+        "format": "{icon}",
+        "max-length": 30
+    }
+}

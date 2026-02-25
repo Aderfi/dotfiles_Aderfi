@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+
+  <!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  XTRA MENU — Árbol de widgets                                    ║
+  ║                                                                  ║
+  ║  GtkWindow#main_window                                           ║
+  ║  └── GtkBox#main_box (vertical)                                  ║
+  ║      ├── GtkBox#sliders_box (vertical)                           ║
+  ║      │   ├── GtkBox#slider_row_brightness (horizontal)           ║
+  ║      │   │   ├── GtkLabel.slider-icon  [󰃞]                      ║
+  ║      │   │   └── GtkScale#slider_brightness → adj_brightness     ║
+  ║      │   └── GtkBox#slider_row_volume (horizontal)               ║
+  ║      │       ├── GtkLabel.slider-icon  [󰕾]                      ║
+  ║      │       └── GtkScale#slider_volume → adj_volume             ║
+  ║      ├── GtkSeparator (horizontal)                               ║
+  ║      └── GtkGrid#btn_grid (3 col × 3 row)                        ║
+  ║          ├── [col=0,row=0] GtkButton#btn_1        .grid-btn      ║
+  ║          ├── [col=1,row=0] GtkToggleButton#btn_2  .grid-btn      ║
+  ║          ├── [col=2,row=0] GtkButton#btn_3        .grid-btn      ║
+  ║          ├── [col=0,row=1] GtkButton#btn_4        .grid-btn      ║
+  ║          ├── [col=1,row=1] GtkButton#btn_5        .grid-btn      ║
+  ║          ├── [col=2,row=1] GtkToggleButton#btn_6  .grid-btn      ║
+  ║          ├── [col=0,row=2] GtkButton#btn_7        .grid-btn      ║
+  ║          ├── [col=1,row=2] GtkToggleButton#btn_8  .grid-btn      ║
+  ║          └── [col=2,row=2] GtkButton#btn_9        .grid-btn      ║
+  ║                                                    .grid-btn-danger ║
+  ║                                                                  ║
+  ║  Notas de diseño:                                                ║
+  ║  · GTK añade la clase .toggle automáticamente a GtkToggleButton. ║
+  ║  · Las clases semánticas (.btn-bluetooth, etc.) y de estado      ║
+  ║    (.btn-bluetooth-active, etc.) las gestiona xtra_menu.py      ║
+  ║    en tiempo de ejecución. No se declaran aquí.                  ║
+  ║  · Los GtkAdjustment se declaran ANTES de los GtkScale que los   ║
+  ║    referencian para garantizar resolución correcta en todos       ║
+  ║    los parsers de GtkBuilder.                                     ║
+  ║  · visible=True se declara en cada widget excepto en GtkWindow,  ║
+  ║    que se muestra desde Python con show_all() para poder hacer    ║
+  ║    configuraciones previas (CSS, posición, etc.).                 ║
+  ╚══════════════════════════════════════════════════════════════════╝
+  -->
+
+  <!-- ══════════════════════════════════════════════════════════════
+       ADJUSTMENTS — deben declararse ANTES de los GtkScale
+       ══════════════════════════════════════════════════════════════ -->
+
+  <object class="GtkAdjustment" id="adj_brightness">
+    <property name="lower">0</property>
+    <property name="upper">100</property>
+    <property name="value">50</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+
+  <object class="GtkAdjustment" id="adj_volume">
+    <property name="lower">0</property>
+    <property name="upper">100</property>
+    <property name="value">50</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       VENTANA PRINCIPAL
+       ══════════════════════════════════════════════════════════════ -->
+
+  <object class="GtkWindow" id="main_window">
+    <property name="title">Xtra Menu</property>
+    <property name="resizable">False</property>
+    <property name="decorated">False</property>
+    <!-- dialog: valor correcto en GTK3 para ventanas flotantes sin decoración.
+         'popup' no existe como valor del enum GdkWindowTypeHint en GTK3.
+         Valores válidos: normal, dialog, menu, toolbar, splashscreen,
+         utility, dock, desktop, dropdown-menu, popup-menu, tooltip,
+         notification, combo, dnd                                     -->
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <!-- visible se omite: se llama show_all() desde Python después
+         de cargar CSS y configurar el estado inicial                 -->
+
+    <child>
+      <object class="GtkBox" id="main_box">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <!-- margin desglosado: GTK3 no reconoce "margin" como
+             propiedad genérica en el XML, solo las cuatro separadas -->
+        <property name="margin_top">15</property>
+        <property name="margin_bottom">15</property>
+        <property name="margin_start">15</property>
+        <property name="margin_end">15</property>
+
+        <!-- ══════════════════════════════════════════════
+             SLIDERS — Brillo y Volumen
+             ══════════════════════════════════════════════ -->
+        <child>
+          <object class="GtkBox" id="sliders_box">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
+
+            <!-- Brillo -->
+            <child>
+              <object class="GtkBox" id="slider_row_brightness">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">10</property>
+
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label">󰃞</property>
+                    <!-- width_chars=2: necesario para glifos Nerd Font de doble ancho -->
+                    <property name="width_chars">2</property>
+                    <style>
+                      <class name="slider-icon"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+
+                <child>
+                  <object class="GtkScale" id="slider_brightness">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="adjustment">adj_brightness</property>
+                    <property name="draw_value">False</property>
+                    <property name="round_digits">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                  </packing>
+                </child>
+
+              </object>
+            </child>
+
+            <!-- Volumen -->
+            <child>
+              <object class="GtkBox" id="slider_row_volume">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">10</property>
+
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label">󰕾</property>
+                    <property name="width_chars">2</property>
+                    <style>
+                      <class name="slider-icon"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+
+                <child>
+                  <object class="GtkScale" id="slider_volume">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="adjustment">adj_volume</property>
+                    <property name="draw_value">False</property>
+                    <property name="round_digits">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                  </packing>
+                </child>
+
+              </object>
+            </child>
+
+          </object>
+        </child>
+
+        <!-- ══════════════════════════════════════════════
+             SEPARADOR horizontal
+             ══════════════════════════════════════════════ -->
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+          </object>
+        </child>
+
+        <!-- ══════════════════════════════════════════════
+             GRID 3×3 — Botones de acción
+             col: 0=izq  1=centro  2=der
+             row: 0=top  1=mid     2=bot
+             ══════════════════════════════════════════════ -->
+        <child>
+          <object class="GtkGrid" id="btn_grid">
+            <property name="visible">True</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">6</property>
+            <!--
+              row_homogeneous / column_homogeneous DESACTIVADOS intencionalmente.
+              Con True el grid fuerza a todas las celdas al mismo tamaño y
+              estira los botones para llenarlas, anulando halign/valign.
+              El tamaño lo dicta el CSS (min-width == min-height en .grid-btn)
+              y el centrado lo garantizan halign/valign en cada botón hijo.
+            -->
+            <property name="row_homogeneous">False</property>
+            <property name="column_homogeneous">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+
+            <!-- ── Fila 0 ─────────────────────────────── -->
+
+            <!-- [col=0,row=0] Browser -->
+            <child>
+              <object class="GtkButton" id="btn_1">
+                <property name="visible">True</property>
+                <property name="label">󰖟</property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+
+            <!-- [col=1,row=0] Bluetooth — GtkToggleButton -->
+            <child>
+              <object class="GtkToggleButton" id="btn_2">
+                <property name="visible">True</property>
+                <property name="label">b</property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+
+            <!-- [col=2,row=0] Terminal -->
+            <child>
+              <object class="GtkButton" id="btn_3">
+                <property name="visible">True</property>
+                <property name="label"></property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+
+            <!-- ── Fila 1 ─────────────────────────────── -->
+
+            <!-- [col=0,row=1] Editor -->
+            <child>
+              <object class="GtkButton" id="btn_4">
+                <property name="visible">True</property>
+                <property name="label">󰨞</property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+
+            <!-- [col=1,row=1] Música -->
+            <child>
+              <object class="GtkButton" id="btn_5">
+                <property name="visible">True</property>
+                <property name="label"></property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+
+            <!-- [col=2,row=1] Luz Nocturna — GtkToggleButton -->
+            <child>
+              <object class="GtkToggleButton" id="btn_6">
+                <property name="visible">True</property>
+                <property name="label">󱩌</property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+
+            <!-- ── Fila 2 ─────────────────────────────── -->
+
+            <!-- [col=0,row=2] Ajustes -->
+            <child>
+              <object class="GtkButton" id="btn_7">
+                <property name="visible">True</property>
+                <property name="label"></property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+
+            <!-- [col=1,row=2] Modo Avión — GtkToggleButton -->
+            <child>
+              <object class="GtkToggleButton" id="btn_8">
+                <property name="visible">True</property>
+                <property name="label">󰀝</property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+
+            <!-- [col=2,row=2] Logout -->
+            <child>
+              <object class="GtkButton" id="btn_9">
+                <property name="visible">True</property>
+                <property name="label">⏻</property>
+                <property name="relief">none</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <style>
+                  <class name="grid-btn"/>
+                  <class name="grid-btn--danger"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </object>
+
+</interface>

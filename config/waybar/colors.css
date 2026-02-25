@@ -1,0 +1,50 @@
+/* -----------------------------------------------------
+ *  COLORS IMPORT
+ *  (Tus colores de Polybar portados a CSS)
+ * ----------------------------------------------------- */
+
+@define-color bg #45433f;
+@define-color fg #000000;
+@define-color ac #FEC006;
+
+@define-color trans transparent;
+@define-color white #FFFFFF;
+@define-color black #000000;
+
+/* Material Colors */
+@define-color red #e53935;
+@define-color pink #d81b60;
+@define-color purple #8e24aa;
+@define-color deep-purple #5e35b1;
+@define-color best-purple #e82adb;
+@define-color indigo #3949ab;
+@define-color blue #b1e3ff;
+@define-color light-blue #039be5;
+@define-color cyan #00acc1;
+@define-color teal #00897b;
+@define-color green #43a047;
+@define-color light-green #7cb342;
+@define-color lime #c0ca33;
+@define-color yellow #FEC006;
+@define-color amber #ffb300;
+@define-color orange #F16E44;
+@define-color deep-orange #f4511e;
+@define-color brown #6d4c41;
+@define-color gray #757575;
+@define-color blue-gray #546e7a;
+
+/* Material Colors Shades - Grey (Usados en tu barra) */
+@define-color greshade1 #212121;
+@define-color greshade2 #424242; /* Usado en tus módulos de título y logo */
+@define-color greshade3 #616161;
+@define-color greshade4 #757575;
+@define-color greshade5 #9E9E9E;
+@define-color greshade6 #BDBDBD;
+@define-color greshade7 #D4D4D4;
+@define-color greshade8 #EEEEEE;
+
+/* Waybar Specific Mappings (Para fácil uso) */
+@define-color wb-bg @bg;
+@define-color wb-fg @white;       /* Tu polybar usaba texto blanco casi siempre */
+@define-color wb-act-bg @greshade2;
+@define-color wb-act-fg @white;

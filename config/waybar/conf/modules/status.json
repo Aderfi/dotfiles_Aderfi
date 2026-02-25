@@ -1,0 +1,33 @@
+{
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": "󰖁 Muted",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "network": {
+        "format-wifi": "󰖩",
+        "format-wifi-plus": "󱛃",
+        "format-ethernet": "󰈀 Wired",
+        "format-disconnected": {
+            "wifi": "󰤮",
+            "ethernet": "󰈂"
+        },
+        "tooltip-format": "{ifname} via {gwaddr} 󰊗",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+        "tooltip-format-ethernet": "{ifname} ",
+        "tooltip-format-disconnected": "Disconnected",
+        "format-icons":{
+            "wifi": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+        }
+    }
+}

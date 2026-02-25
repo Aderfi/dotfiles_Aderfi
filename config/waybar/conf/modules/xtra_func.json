@@ -1,0 +1,7 @@
+{
+    "custom/xtra_func": {
+        "format": "", 
+        "on-click": "~/.config/waybar/custom/xtra_menu/xtra_menu_launcher.sh {} {}",
+        "tooltip": false
+    }
+}

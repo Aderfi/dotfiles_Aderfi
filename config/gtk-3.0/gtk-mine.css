@@ -1,0 +1,59 @@
+/* ==========================================================
+   1. VARIABLES & CONSTANTS
+   Defining common colors or sizes here makes maintenance easy.
+   ========================================================== */
+@define-color accent_color #3584e4;
+@define-color warning_color #f5c211;
+
+/* ==========================================================
+   2. WINDOW & HEADERBAR (The "Top" of the Window)
+   This reduces the vertical footprint of your applications.
+   ========================================================== */
+headerbar {
+    min-height: 15px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin: 0;
+}
+
+/* Slim down buttons inside the headerbar */
+headerbar button {
+    padding: 2px 6px;
+    min-height: 20px;
+}
+
+/* ==========================================================
+   3. BUTTONS & CONTROLS
+   Standardizing the look of UI elements.
+   ========================================================== */
+button {
+    border-radius: 4px;
+    transition: all 150ms ease-in-out;
+}
+
+entry {
+    border-radius: 4px;
+    padding: 4px;
+}
+
+/* ==========================================================
+   4. SCROLLBARS
+   Making them thinner or auto-hide to save screen real estate.
+   ========================================================== */
+/*scrollbar {
+    -GtkScrollbar-has-backward-stepper: 0;
+    -GtkScrollbar-has-forward-stepper: 0;
+}
+
+scrollbar slider {
+    min-width: 6px;
+    border-radius: 10px;
+}
+*/
+/* ==========================================================
+   5. BORDERS & SPACING
+   Removing unnecessary padding for a "compact" look.
+   ========================================================== */
+window.main-window {
+    padding: 0;
+}

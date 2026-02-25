@@ -1,0 +1,370 @@
+@import "../../colors.css";
+
+/* ══════════════════════════════════════════════════════════════════════════════
+ * XTRA MENU — GTK3 CSS  (GTK 3.20+, verificado contra docs GTK 3.24)
+ *
+ * ── REGLA DE ORO — Selectores de toggle ────────────────────────────────────
+ *   GTK3 no resuelve correctamente selectores compuestos con :checked e IDs.
+ *   Todo el estado de los toggles se gestiona desde Python añadiendo
+ *   y quitando clases explícitas. El CSS solo lee esas clases.
+ *
+ *   NUNCA usar:  button.toggle#btn_2:checked  ← roto en GTK3
+ *   SIEMPRE usar: button.btn-bluetooth--active ← gestionado por Python
+ *
+ * ── Clases por toggle (añadidas/quitadas desde xtra_menu.py) ───────────────
+ *   .btn-bluetooth           clase estática (siempre presente en btn_2)
+ *   .btn-bluetooth--active   clase de estado (solo cuando activo)
+ *   .btn-nightlight          clase estática (siempre presente en btn_6)
+ *   .btn-nightlight--active  clase de estado
+ *   .btn-airplane            clase estática (siempre presente en btn_8)
+ *   .btn-airplane--active    clase de estado
+ *
+ * ── Árbol de nodos CSS (espeja el árbol GTK del XML) ───────────────────────
+ *   window#main_window
+ *   └── box#main_box
+ *       ├── box#sliders_box
+ *       │   ├── box#slider_row_brightness
+ *       │   │   ├── label.slider-icon
+ *       │   │   └── scale#slider_brightness
+ *       │   │       └── trough > highlight, slider
+ *       │   └── box#slider_row_volume
+ *       │       ├── label.slider-icon
+ *       │       └── scale#slider_volume
+ *       │           └── trough > highlight, slider
+ *       ├── separator
+ *       └── grid#btn_grid
+ *           ├── button.grid-btn                (btn_1 btn_3 btn_4 btn_5 btn_7)
+ *           ├── button.grid-btn.toggle         (btn_2 btn_6 btn_8 — GTK añade .toggle)
+ *           ├── button.btn-bluetooth           (btn_2 en reposo)
+ *           ├── button.btn-bluetooth--active   (btn_2 activo)
+ *           ├── button.btn-nightlight          (btn_6 en reposo)
+ *           ├── button.btn-nightlight--active  (btn_6 activo)
+ *           ├── button.btn-airplane            (btn_8 en reposo)
+ *           ├── button.btn-airplane--active    (btn_8 activo)
+ *           └── button.grid-btn--danger        (btn_9)
+ *
+ * ── Propiedades verificadas contra docs GTK 3.24 ───────────────────────────
+ *   SOPORTADAS:  background-image (gradientes), background-color, background-clip
+ *                (border-box|padding-box|content-box), background-origin,
+ *                background-blend-mode (solo entre capas del mismo widget),
+ *                box-shadow, outline-style, outline-width, outline-color,
+ *                outline-offset, -gtk-outline-radius (shorthand de radios),
+ *                border-*, border-radius, padding-*, margin-*, min-width,
+ *                min-height, font-*, color, opacity, transition-*, animation-*
+ *   NO SOPORTADAS: backdrop-filter, clip-path, contain, will-change,
+ *                  -gtk-outline-width (eliminada en GTK3 moderno),
+ *                  background shorthand con <box> antes del gradiente
+ *
+ * ── Pseudo-clases soportadas (GTK 3.20+) ───────────────────────────────────
+ *   :active :hover :disabled :selected :focus :indeterminate :checked :backdrop
+ *   :first-child :last-child :nth-child() :dir(ltr|rtl) :link :visited
+ *   NOTA: :checked en GtkToggleButton funciona en selectores simples pero
+ *   falla combinado con IDs (button#id:checked). Usar clases explícitas.
+ * ══════════════════════════════════════════════════════════════════════════════ */
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * VENTANA
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+window#main_window {
+    /*
+     * background-image acepta gradientes CSS estándar en GTK3.
+     * 'circle' explícito evita warnings en GTK3 < 3.22.
+     */
+    background-image: radial-gradient(circle, crimson, skyblue);
+}
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * SLIDERS — Brillo y Volumen
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+box#sliders_box {
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+box#slider_row_brightness,
+box#slider_row_volume {
+    margin-bottom: 5px;
+}
+
+label.slider-icon {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 16px;
+    min-height: 0;
+    min-width: 0;
+    color: @white;
+    padding-left: 10px;
+}
+
+/*
+ * Árbol de nodos CSS de GtkScale (fuente: docs GTK 3.24 oficiales):
+ *   scale[.fine-tune]
+ *   └── trough
+ *       ├── slider
+ *       ├── highlight   ← relleno del lado izquierdo del slider
+ *       └── fill
+ *
+ * Selector correcto: scale trough highlight (NO "scale highlight")
+ */
+scale trough {
+    min-height: 6px;
+    min-width: 180px;
+    background-color: @greshade2;
+    border: 1px solid @greshade3;
+}
+
+scale trough highlight {
+    background-image: linear-gradient(to right, @blue, @green, yellow, orange, red);
+}
+
+scale trough slider {
+    min-width: 14px;
+    min-height: 14px;
+    background-color: @white;
+    border: 1px solid @cyan;
+}
+
+scale trough slider:hover {
+    background-color: @cyan;
+    border-color: @white;
+}
+
+scale trough slider:active {
+    background-color: @ac;
+    border-color: @ac;
+}
+
+/*
+ * Overrides individuales por slider — descomentar si se necesitan.
+ * Selector correcto: scale#id trough highlight
+ */
+scale#slider_brightness trough highlight{
+    background-image: none;
+    background-image: linear-gradient(to right, @red, @red);
+}
+ /* scale#slider_volume trough highlight {
+ *     background-image: linear-gradient(to right, @green, @cyan);
+ * }
+ */
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * SEPARADOR
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+separator {
+    background-color: @greshade4;
+    min-height: 2px;
+    opacity: 0.75;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+ * GRID DE BOTONES
+ * ══════════════════════════════════════════════════════════════════════════════ */
+
+grid#btn_grid {
+    padding: 5px 10px;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * BASE COMPARTIDA — todos los botones del grid (normales y toggles)
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+button.grid-btn {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 20px;
+    /*
+     * CÍRCULO PERFECTO EN GTK3 — tres capas necesarias:
+     *
+     * 1. border-radius: 50%
+     *    Redondea el borde del widget.
+     *
+     * 2. background-clip: padding-box
+     *    Impide que el background-color "se salga" de las esquinas
+     *    redondeadas. Sin esto el fondo sigue siendo visualmente
+     *    cuadrado aunque el borde esté recortado.
+     *
+     * 3. La clase .circular (añadida en el XML de cada botón)
+     *    Es la clase nativa de GTK3 para botones redondos. GTK la
+     *    reconoce internamente y aplica el clip correcto en el motor
+     *    de renderizado Cairo, incluyendo el nodo hijo `label`.
+     *    Sin ella, Adwaita puede sobreescribir el background con sus
+     *    propios estilos que no respetan el radio.
+     *
+     * min-width == min-height garantiza el cuadrado base.
+     * halign/valign center en el XML evita que el grid estire el widget.
+     */
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    font-size: 23px;
+    margin: 4px;
+    border-radius: 50%;
+    background-clip: padding-box;
+    border-style: none;
+    background-color: transparent;
+    color: @white;
+}
+
+/* Neutralizar el nodo label hijo del botón — hereda el clip del padre */
+button.grid-btn label {
+    background-color: transparent;
+    background-clip: padding-box;
+}
+
+button.grid-btn:hover {
+    background-color: rgba(255, 255, 255, 0.351);
+}
+
+button.grid-btn:active {
+    background-color: transparent;
+}
+
+button.grid-btn:focus {
+    /*
+     * GTK3 (docs 3.24) usa outline-* para el focus rectangle.
+     * Para eliminarlo: outline-style: none + outline-width: 0
+     * Para anular el focus glow del tema Adwaita: box-shadow: none
+     * NO usar -gtk-outline-width (propiedad privada eliminada en GTK3 moderno).
+     */
+    outline-style: none;
+    outline-width: 0;
+    box-shadow: none;
+}
+
+/*
+ * GTK3 añade .toggle automáticamente a GtkToggleButton y aplica estilos
+ * de :checked desde el tema del sistema (Adwaita, Breeze, etc.).
+ * Esta regla neutraliza esos estilos base para que las clases explícitas
+ * (.btn-X--active) sean la única fuente de verdad visual del estado.
+ *
+ * Especificidad de esta regla: dos clases + pseudoclase
+ * → supera al tema base que usa una clase o una pseudoclase sola.
+ */
+button.grid-btn:checked {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+button:checked{    /* Heredan las propiedades base de .grid-btn, solo override lo necesario */
+    background: none;
+    color: transparent;
+}
+
+button#btn_2:active label {
+    color:greenyellow;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * TOGGLES — estado INACTIVO (estilos específicos por botón en reposo)
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+button.btn-bluetooth label {
+    color: rgba(255, 255, 255, 0.6);
+    background-color: transparent;
+    background-clip: padding-box;
+    border: 1px hidden @greshade3;
+    padding: 0px 2px 0px 0px;
+    border-radius: 50%;
+}
+
+button.btn-bluetooth:hover label  {
+    color: rgba(33, 150, 243, 1);
+    box-shadow: 0 0 6px  rgba(173, 171, 171, 0.65);
+}
+
+/* btn_6: Luz nocturna — hereda @white de .grid-btn; solo override en hover */
+button.btn-nightlight:hover {
+    background-color: rgba(255, 152, 0, 0.12);
+    color: rgb(255, 154, 60);
+}
+
+/* btn_8: Modo avión — gris apagado en reposo */
+button.btn-airplane {
+    color: rgba(160, 160, 160, 1);
+}
+
+button.btn-airplane:hover {
+    background-color: rgba(0, 172, 193, 0.12);
+    color: @cyan;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * TOGGLES — estado ACTIVO
+ *
+ * .btn-X--active la añade Python (ENCENDIDO) y la quita (APAGADO).
+ * Es la única fuente de verdad para el estado visual.
+ *
+ * Especificidad: dos clases compuestas (estática + activa) supera
+ * al selector base .grid-btn (una clase). No se usa :checked ni IDs.
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+/* btn_2: Bluetooth activo */
+button.btn-bluetooth.btn-bluetooth--active label {
+    background: none;
+    color: rgba(33, 150, 243, 1);
+    background-clip: padding-box;
+    border: 1px hidden @greshade3;
+    padding: 0px 2px 0px 0px;
+    font-size:23px;
+}
+
+
+button.btn-bluetooth.btn-bluetooth--active:hover {
+    background: none;
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 6px  rgba(173, 171, 171, 0.65);
+
+}
+
+/* btn_6: Luz nocturna activa */
+button.btn-nightlight.btn-nightlight--active {
+    background-color: rgba(255, 152, 0, 0.2);
+    color: @orange;
+    font-size: 23px;
+}
+
+button.btn-nightlight.btn-nightlight--active:hover {
+    background-color: rgba(255, 152, 0, 0.35);
+}
+
+/* btn_8: Modo avión activo */
+button.btn-airplane.btn-airplane--active {
+    background-color: rgba(0, 172, 193, 0.2);
+    color: @cyan;
+}
+
+button.btn-airplane.btn-airplane--active:hover {
+    background-color: rgba(0, 172, 193, 0.35);
+}
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * LOGOUT — button.grid-btn--danger (btn_9)
+ * ────────────────────────────────────────────────────────────────────────────── */
+
+button.grid-btn--danger label{
+    color: @red;
+    background-color: rgba(229, 57, 53, 0.15);
+    padding: 0px 3px 0px 0px;
+    border-radius: 50%;
+}
+
+button.grid-btn--danger:hover label{
+    background-color: @red;
+    color: @white;
+}
+
+button.grid-btn--danger:active {
+    background-color: @deep-orange;
+    color: @white;
+}

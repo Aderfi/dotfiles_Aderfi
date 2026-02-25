@@ -1,0 +1,36 @@
+# ~/.zshenv - Environment vars for zsh sessions
+typeset -U path
+
+# PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# EDITOR
+export EDITOR="gedit"
+
+# PAGER
+export PAGER="less"
+
+#export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
+#export __EGL_VENDOR_LIBRARY_FILENAMES="/usr/share/glvnd/egl_vendor.d/10_nvidia.json"
+#export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+
+
+#env = QT_STYLE_OVERRIDE,adwaita-dark
+#env = GTK_THEME,Adwaita:dark
+#env = QT_QPA_PLATFORMTHEME,qt6ct
+
+# XDG Base Directory Specification
+# --- XDG Base Directory Config ---
+
+# 1. Set XDG_CONFIG_HOME if missing
+if [[ -z "$XDG_CONFIG_HOME" ]]; then
+    export XDG_CONFIG_HOME="$HOME/.config"
+fi
+
+# 2. Set XDG_DATA_HOME if missing (usually ~/.local/share)
+if [[ -z "$XDG_DATA_HOME" ]]; then
+    export XDG_DATA_HOME="$HOME/.local/share"
+fi
+
+# Cargo
+. "$HOME/.cargo/env"

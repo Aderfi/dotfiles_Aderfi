@@ -1,0 +1,7 @@
+{
+    "custom/sysmenu": {
+        "format": "",
+        "on-click": "wlogout",
+        "tooltip": false
+    }
+}

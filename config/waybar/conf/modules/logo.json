@@ -1,0 +1,8 @@
+{
+    "custom/logo": {
+        "format": "",
+        "min-length": 0,
+        "tooltip": true,
+        "on-click": "wofi --show drun --normal-window",
+        }
+}

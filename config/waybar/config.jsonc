@@ -1,0 +1,38 @@
+{
+    "layer": "top",
+    "position": "top",
+    "mod": "overlay",
+    "spacing": 5,
+    //"exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    //"fixed-center": true,
+    "reload_style_on_change": true,
+    "height": 38,
+    //"width": 20,
+    //"margin-top": ,
+    //"margin-bottom": 10,
+    //"margin-left": 0,
+    //"margin-right": 0,
+    
+    "include": [
+        "~/.config/waybar/conf/modules/logo.json",
+        "~/.config/waybar/conf/modules/date.json",
+        //"~/.config/waybar/conf/modules/title.json",
+        "~/.config/waybar/conf/modules/network_ip.json",
+        "~/.config/waybar/conf/modules/workspaces.json",
+        "~/.config/waybar/conf/modules/battery.json",
+        "~/.config/waybar/conf/modules/status.json",
+        "~/.config/waybar/conf/modules/sysmenu.json",
+        "~/.config/waybar/conf/modules/xtra_func.json"
+    ],
+
+    // --- MODULES CONFIGURATION ---
+    "modules-left": ["custom/logo", "clock"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": [ "custom/xtra_func", "battery", "pulseaudio", "network", "custom/sysmenu"]
+    
+    //"sway/window":{
+    //	"max-lenght": 50
+    //},
+}

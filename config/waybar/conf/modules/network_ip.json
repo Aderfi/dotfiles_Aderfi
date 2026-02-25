@@ -1,0 +1,10 @@
+{
+    "network#ip": {
+        "format-wifi": "{ipaddr}",
+        "format-ethernet": "{ipaddr}",
+        "format-disconnected": "No IP",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "{ifname} (No IP)",
+        "interval": 30
+    }
+}

@@ -15,6 +15,76 @@ Zsh + Oh My Zsh + Powerlevel10k. Compatible con **Debian bare metal** y **WSL2**
 
 ---
 
+## Instalación rápida
+
+```bash
+git clone https://github.com/TU_USUARIO/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+chmod +x install.sh
+./install.sh
+```
+
+El script detecta automáticamente si estás en WSL2 o bare metal y pregunta:
+- **Entorno**: Debian / WSL2
+- **WM**: Sway, Hyprland o ambos
+- **Terminal**: foot, kitty o ambas
+
+### Lo que hace el installer
+
+1. Actualiza el sistema
+2. Instala paquetes base (waybar, dunst, rofi, wlogout, etc.)
+3. Instala el WM seleccionado
+4. Instala la terminal seleccionada
+5. Instala Oh My Zsh + Powerlevel10k
+6. Descarga e instala **Hack Nerd Font Propo** automáticamente
+7. Instala cursores Nordic + Nordzy
+8. Instala iconos Papirus-Dark, Breeze, Kora
+9. Copia el wallpaper
+10. Crea symlinks de todas las configuraciones
+11. Aplica temas via gsettings
+12. Configura Ly (solo bare metal)
+
+---
+
+## Empaquetar desde sistema fuente
+
+Para actualizar el dotfiles desde tu portátil/máquina principal:
+
+```bash
+cd ~/.dotfiles
+./pack.sh
+git commit -m "Update dotfiles $(date +%Y-%m-%d)"
+git push
+```
+
+---
+
+## Notas WSL2
+
+- XWayland no funciona en modo compositor anidado sobre WSLg
+- Apps X11 usan el XWayland de WSLg directamente
+- El módulo `battery` de Waybar está desactivado en WSL2
+- Añade `"interface": "eth0"` a `network_ip.json` para evitar el error RFKILL
+- Bordes redondeados no disponibles (SwayFX requiere acceso DRM directo)
+- Arranque: `sway-session` o `hyprland-session` desde la terminal WSL2
+
+---
+
+## Post-instalación
+
+```bash
+# Primera vez — configurar prompt
+p10k configure
+
+# Recargar shell
+exec zsh
+
+# Añadir wallpaper
+cp ~/tu-wallpaper.png ~/Pictures/wallpaper.png
+```
+
+---
+
 ## Componentes
 
 | Categoría        | Herramienta                          |
@@ -115,76 +185,6 @@ dotfiles/
 │
 └── ly/
     └── config.ini                  # Config Ly (solo bare metal)
-```
-
----
-
-## Instalación rápida
-
-```bash
-git clone https://github.com/TU_USUARIO/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-chmod +x install.sh
-./install.sh
-```
-
-El script detecta automáticamente si estás en WSL2 o bare metal y pregunta:
-- **Entorno**: Debian / WSL2
-- **WM**: Sway, Hyprland o ambos
-- **Terminal**: foot, kitty o ambas
-
-### Lo que hace el installer
-
-1. Actualiza el sistema
-2. Instala paquetes base (waybar, dunst, rofi, wlogout, etc.)
-3. Instala el WM seleccionado
-4. Instala la terminal seleccionada
-5. Instala Oh My Zsh + Powerlevel10k
-6. Descarga e instala **Hack Nerd Font Propo** automáticamente
-7. Instala cursores Nordic + Nordzy
-8. Instala iconos Papirus-Dark, Breeze, Kora
-9. Copia el wallpaper
-10. Crea symlinks de todas las configuraciones
-11. Aplica temas via gsettings
-12. Configura Ly (solo bare metal)
-
----
-
-## Empaquetar desde sistema fuente
-
-Para actualizar el dotfiles desde tu portátil/máquina principal:
-
-```bash
-cd ~/.dotfiles
-./pack.sh
-git commit -m "Update dotfiles $(date +%Y-%m-%d)"
-git push
-```
-
----
-
-## Notas WSL2
-
-- XWayland no funciona en modo compositor anidado sobre WSLg
-- Apps X11 usan el XWayland de WSLg directamente
-- El módulo `battery` de Waybar está desactivado en WSL2
-- Añade `"interface": "eth0"` a `network_ip.json` para evitar el error RFKILL
-- Bordes redondeados no disponibles (SwayFX requiere acceso DRM directo)
-- Arranque: `sway-session` o `hyprland-session` desde la terminal WSL2
-
----
-
-## Post-instalación
-
-```bash
-# Primera vez — configurar prompt
-p10k configure
-
-# Recargar shell
-exec zsh
-
-# Añadir wallpaper
-cp ~/tu-wallpaper.png ~/Pictures/wallpaper.png
 ```
 
 ---

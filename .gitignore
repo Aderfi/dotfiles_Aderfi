@@ -31,3 +31,13 @@ __pycache__/
 
 # ── Logs ─────────────────────────────────────────────────────
 *.log
+
+# ── Generado en runtime por apps con config enlazada al repo ─
+config/micro/backups/
+config/micro/buffers/
+config/micro/plug/
+config/hypr/conf/
+config/hypr/*.back*
+config/hypr/mmm.txt
+config/waybar/themes/
+config/uwsm/default-id

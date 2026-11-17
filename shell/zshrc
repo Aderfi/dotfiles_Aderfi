@@ -166,11 +166,11 @@ export BAT_THEME="Visual Studio Dark+"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source "/home/astordna/.openclaw/completions/openclaw.zsh"
+[[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
 
 if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then 
   source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
-eval "$(ruff generate-shell-completion zsh)"
+command -v ruff &>/dev/null && eval "$(ruff generate-shell-completion zsh)"
 
 

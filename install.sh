@@ -44,7 +44,7 @@ link() {
         warn "Backup: $dst → $dst.bak"
         mv "$dst" "$dst.bak"
     fi
-    ln -sf "$src" "$dst"
+    ln -sfn "$src" "$dst"
     success "Enlazado: ${DIM}$dst${NC}"
 }
 
@@ -55,7 +55,7 @@ link_dir() {
         warn "Backup: $dst → $dst.bak"
         mv "$dst" "$dst.bak"
     fi
-    ln -sf "$src" "$dst"
+    ln -sfn "$src" "$dst"
     success "Enlazado (dir): ${DIM}$dst${NC}"
 }
 
@@ -270,11 +270,15 @@ install_cursor "Nordzy-cursors" \
 
 # Default cursor
 mkdir -p "$ICONS_DIR/default"
-cat > "$ICONS_DIR/default/index.theme" << 'EOF'
+if [[ -f "$DOTFILES/icons/default/index.theme" ]]; then
+    cp "$DOTFILES/icons/default/index.theme" "$ICONS_DIR/default/index.theme"
+else
+    cat > "$ICONS_DIR/default/index.theme" << 'EOF'
 [Icon Theme]
 Name=Default
 Inherits=Nordic-cursors
 EOF
+fi
 success "Cursor por defecto: Nordic-cursors"
 
 # ════════════════════════════════════════════════════════════
@@ -320,19 +324,31 @@ step "8. Enlazando configuraciones"
 
 mkdir -p "$LOCAL_BIN"
 
-link "$DOTFILES/shell/zshrc"  "$HOME/.zshrc"
-link "$DOTFILES/shell/zshenv" "$HOME/.zshenv"
+link "$DOTFILES/shell/zshrc"    "$HOME/.zshrc"
+link "$DOTFILES/shell/zshenv"   "$HOME/.zshenv"
+link "$DOTFILES/shell/zprofile" "$HOME/.zprofile"
+link "$DOTFILES/shell/bashrc"   "$HOME/.bashrc"
 [[ -f "$DOTFILES/shell/p10k.zsh" ]] \
     && link "$DOTFILES/shell/p10k.zsh" "$HOME/.p10k.zsh" \
     || warn "p10k.zsh no encontrado — ejecuta 'p10k configure' manualmente"
 
-link_dir "$DOTFILES/config/waybar"  "$CFG/waybar"
-link_dir "$DOTFILES/config/gtk-3.0" "$CFG/gtk-3.0"
-link_dir "$DOTFILES/config/gtk-4.0" "$CFG/gtk-4.0"
-link_dir "$DOTFILES/config/qt6ct"   "$CFG/qt6ct"
+# ~/.profile arranca Hyprland vía uwsm al hacer login en TTY: solo bare metal + Hyprland
+if [[ "$IS_WSL" == false && ( "$WM" == *"Hyprland"* || "$WM" == "Ambos" ) ]]; then
+    link "$DOTFILES/shell/profile" "$HOME/.profile"
+else
+    skip "~/.profile (autoarranque uwsm/Hyprland)"
+fi
 
-[[ -d "$DOTFILES/config/dunst" ]] && link_dir "$DOTFILES/config/dunst" "$CFG/dunst"
-[[ -d "$DOTFILES/config/rofi"  ]] && link_dir "$DOTFILES/config/rofi"  "$CFG/rofi"
+[[ -f "$DOTFILES/git/gitconfig" ]] && link "$DOTFILES/git/gitconfig" "$HOME/.gitconfig"
+
+# Configs que se enlazan si están en el repo
+for d in waybar gtk-3.0 gtk-4.0 qt5ct qt6ct Kvantum nwg-look xsettingsd fontconfig \
+         lsd fastfetch btop micro cava git dunst rofi swaync wofi; do
+    [[ -d "$DOTFILES/config/$d" ]] && link_dir "$DOTFILES/config/$d" "$CFG/$d"
+done
+for f in mimeapps.list user-dirs.dirs; do
+    [[ -f "$DOTFILES/config/$f" ]] && link "$DOTFILES/config/$f" "$CFG/$f"
+done
 
 [[ "$TERMINAL" == *"foot"*   || "$TERMINAL" == "Ambas" ]] \
     && [[ -d "$DOTFILES/config/foot" ]] \
@@ -342,13 +358,20 @@ link_dir "$DOTFILES/config/qt6ct"   "$CFG/qt6ct"
     && link_dir "$DOTFILES/config/kitty" "$CFG/kitty"
 
 if [[ "$WM" == *"Sway"* || "$WM" == "Ambos" ]]; then
-    link_dir "$DOTFILES/config/sway" "$CFG/sway"
-    install -m 755 "$DOTFILES/scripts/sway-session" "$LOCAL_BIN/sway-session"
-    success "sway-session → $LOCAL_BIN"
+    [[ -d "$DOTFILES/config/sway" ]] && link_dir "$DOTFILES/config/sway" "$CFG/sway"
+    if [[ -f "$DOTFILES/scripts/sway-session" ]]; then
+        install -m 755 "$DOTFILES/scripts/sway-session" "$LOCAL_BIN/sway-session"
+        success "sway-session → $LOCAL_BIN"
+    else
+        warn "scripts/sway-session no está en el repo"
+    fi
 fi
 
 if [[ "$WM" == *"Hyprland"* || "$WM" == "Ambos" ]]; then
     link_dir "$DOTFILES/config/hypr" "$CFG/hypr"
+    for d in uwsm environment.d xdg-desktop-portal; do
+        [[ -d "$DOTFILES/config/$d" ]] && link_dir "$DOTFILES/config/$d" "$CFG/$d"
+    done
     install -m 755 "$DOTFILES/scripts/hyprland-session" "$LOCAL_BIN/hyprland-session"
     success "hyprland-session → $LOCAL_BIN"
 fi
@@ -399,19 +422,23 @@ else
     info "Recuerda añadir '\"interface\": \"eth0\"' a network_ip.json"
 fi
 
-cat << 'EOF' | sudo tee /usr/share/wayland-sessions/hyprland.desktop
+# ════════════════════════════════════════════════════════════
+if [[ "$WM" == *"Hyprland"* || "$WM" == "Ambos" ]]; then
+    step "12. Hyprland"
+    if ! has Hyprland && ! has hyprland; then
+        warn "Hyprland no encontrado — compílalo: https://wiki.hypr.land/Getting-Started/Installation/"
+    fi
+    if [[ "$IS_WSL" == false ]]; then
+        cat << 'EOF' | sudo tee /usr/share/wayland-sessions/hyprland.desktop >/dev/null
 [Desktop Entry]
 Name=Hyprland
 Comment=An intelligent dynamic tiling Wayland compositor
 Exec=/usr/local/bin/start-hyprland
+Type=Application
 EOF
-
-# =═══════════════════════════════════════════════════════════
-# Hyprland Building
-if [[ "$WM" == *"Hyprland"* || "$WM" == "Ambos" ]]; then
-    if ! has hyprland; then
-        info "Hyprland no encontrado — compila manualmente siguiendo las instrucciones oficiales"
-        echo -e "  ${YELLOW}
+        success "Sesión Hyprland registrada para Ly"
+    fi
+fi
 
 # ════════════════════════════════════════════════════════════
 echo ""

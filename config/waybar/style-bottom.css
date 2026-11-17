@@ -1,0 +1,57 @@
+@import "colors.css";
+
+* {
+    border-radius: 0;
+    font-size: 14px;
+    min-height: 0;
+}
+
+* label {
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+window#waybar {
+    background: rgba(0, 0, 0, 0.05);
+    color: @white;
+}
+
+window#waybar label {
+    background: rgba(255, 255, 255, 0.08);
+    color: @white;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    border-radius: 25px;
+    color: @gray;
+    background: transparent;
+}
+#workspaces button.active {
+    color: @light-blue;
+}
+
+#taskbar {
+    padding: 0 5px;
+}
+#taskbar button {
+    padding: 2px 2px;
+    margin: 5px 0px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    color: @white;
+}
+#taskbar button.active {
+    background: rgba(255, 255, 255, 0.18);
+    color: @light-blue;
+}
+
+#taskbar button:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+#window {
+    padding: 0 7px;
+    color: @gray;
+    font-style: italic;
+}

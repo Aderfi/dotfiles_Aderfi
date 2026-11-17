@@ -66,7 +66,7 @@ RIGHT_CLICK_NORMAL: dict[str, list[str] | None] = {
 
 # Comandos para clic derecho — toggles (abrir app de configuración del servicio)
 RIGHT_CLICK_TOGGLE: dict[str, list[str] | None] = {
-    "btn_2": None,  # ej: ["blueman-manager"]
+    "btn_2": ["blueman-manager"],
     "btn_6": None,  # ej: ["gnome-control-center", "display"]
     "btn_8": None,  # ej: ["nm-connection-editor"]
 }
@@ -202,10 +202,12 @@ class XtraMenu:
 
     def _position_hyprctl(self) -> bool:
         """
-        Mueve la ventana a (click_x, click_y + 100) via hyprctl.
+        Centra la ventana horizontalmente bajo el cursor y la coloca
+        justo bajo la barra (38 px + 5 px de separación).
         Retorna False para que GLib.idle_add no lo repita.
         """
         try:
+            win_width = self.window.get_allocated_width()
             result = subprocess.run(
                 ["hyprctl", "clients", "-j"],
                 capture_output=True, text=True, timeout=2,
@@ -213,8 +215,8 @@ class XtraMenu:
             if result.returncode != 0:
                 return False
             clients = json.loads(result.stdout)
-            target_x = self.click_x
-            target_y = self.click_y + 100
+            target_x = self.click_x - win_width // 2
+            target_y = 43  # barra (38 px) + separación (5 px)
             for client in clients:
                 if "Xtra Menu" in client.get("title", ""):
                     subprocess.run(
@@ -305,7 +307,7 @@ class XtraMenu:
     def _nightlight_active(self) -> bool:
         try:
             return subprocess.run(
-                ["pgrep", "-x", "hyprsunset"], capture_output=True, timeout=2,
+                ["pgrep", "-x", "wlsunset"], capture_output=True, timeout=2,
             ).returncode == 0
         except Exception:
             return False
@@ -373,9 +375,9 @@ class XtraMenu:
         is_active = btn.get_active()
         self._apply_toggle_style(btn, "btn_6", is_active)
         if is_active:
-            self._run_bg(["hyprsunset", "-t", "3500"], new_session=True)
+            self._run_bg(["wlsunset", "-l", "40.4", "-L", "-3.7", "-t", "3500"], new_session=True)
         else:
-            self._run_bg(["pkill", "-x", "hyprsunset"])
+            self._run_bg(["pkill", "-x", "wlsunset"])
 
     def _on_airplane_toggle(self, btn: Gtk.ToggleButton) -> None:
         is_active = btn.get_active()

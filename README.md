@@ -10,45 +10,90 @@
 
 </div>
 
-Entorno personal de escritorio basado en **Sway** / **Hyprland** con Waybar custom,
-Zsh + Oh My Zsh + Powerlevel10k. Compatible con **Debian bare metal** y **WSL2**.
+Personal desktop environment based on **Hyprland**. Using **Sway** for WSL2. Both with Waybar and custom modules.
+
+**Zsh + Oh My Zsh + Powerlevel10k.**
+
+Compatible w/ **Debian** y **WSL2**.
 
 ---
+
+## Componentes
+
+| Categoría       | Herramienta                         |
+| --------------- | ----------------------------------- |
+| WM              | Sway / Hyprland                     |
+| Bar             | Waybar (custom modules + xtra_menu) |
+| Shell           | Zsh + Oh My Zsh + Powerlevel10k     |
+| Terminal        | Kitty                               |
+| Launcher        | Rofi                                |
+| Notificaciones  | Dunst                               |
+| Wallpaper       | swaybg                              |
+| File Manager    | Thunar                              |
+| GTK Theme       | Adwaita-dark                        |
+| Icon Theme      | Papirus-Dark / Breeze / Kora        |
+| Cursor (X)      | Nordic-cursors                      |
+| Cursor (Hypr)   | Nordzy-cursors                      |
+| Main Font       | Hack Nerd Font Propo                |
+| Session Manager | Ly (Custom config)                  |
+| Qt Theme        | Adwaita-Dark (qt6ct)                |
+
+---
+
+## [Structure](docs/PROJECT_STRUCTURE.md)
 
 ## Instalación rápida
 
 ```bash
-git clone https://github.com/TU_USUARIO/dotfiles.git ~/.dotfiles
+git clone https://github.com/Aderfi/dotfiles_Aderfi.git ~/.dotfiles
 cd ~/.dotfiles
 chmod +x install.sh
 ./install.sh
 ```
 
-El script detecta automáticamente si estás en WSL2 o bare metal y pregunta:
+Auto detection of env. Debian/WSL2:
+
 - **Entorno**: Debian / WSL2
-- **WM**: Sway, Hyprland o ambos
-- **Terminal**: foot, kitty o ambas
+- **WM**: Sway, Hyprland, Both
+- **Terminal**: kitty (foot by default when installing Hyprland)
 
-### Lo que hace el installer
+### What does?
 
-1. Actualiza el sistema
-2. Instala paquetes base (waybar, dunst, rofi, wlogout, etc.)
-3. Instala el WM seleccionado
-4. Instala la terminal seleccionada
-5. Instala Oh My Zsh + Powerlevel10k
-6. Descarga e instala **Hack Nerd Font Propo** automáticamente
-7. Instala cursores Nordic + Nordzy
-8. Instala iconos Papirus-Dark, Breeze, Kora
-9. Copia el wallpaper
-10. Crea symlinks de todas las configuraciones
-11. Aplica temas via gsettings
-12. Configura Ly (solo bare metal)
+1. Set up sources deb & deb-src for main, security, updates and backports
+   
+       With the next suites: main contrib non-free non-free-firmware
+   
+   Update system and upgrade.
+   
+   ### Installs
 
----
+2. Install base packages (waybar, dunst, rofi, wlogout, etc.)
 
-## Empaquetar desde sistema fuente
+3. Window Manager
 
-Para actualizar el dotfiles desde tu portátil/máquina principal:
+4. Terminal
+
+5. Zsh + Oh My Zsh + Powerlevel10k
+
+6. Download & Install Hack Nerd Font Propo** 
+
+7. Cursors Nordic + Nordzy
+
+8. Icon-themes Papirus-Dark, Breeze, Kora
+
+9. Copy wallpaper
+
+10. Symlinks for all configs
+
+11. Appy themes with gsettings
+
+12. Configure Ly session manager
+    
+    1. It is possible you have to remove sddm
+
+13. **A**
+
+## Pack.sh
 
 ```bash
 cd ~/.dotfiles
@@ -57,15 +102,20 @@ git commit -m "Update dotfiles $(date +%Y-%m-%d)"
 git push
 ```
 
+pack.sh will automatically copy all files corresponding to the configuration to its ubication. If executed in an empty dir, will iterate over all the corresponding configuration present and copy into de dir so it can be compressed lately.
+
+Also useful for updates.
+
 ---
 
 ## Notas WSL2
 
-- XWayland no funciona en modo compositor anidado sobre WSLg
-- Apps X11 usan el XWayland de WSLg directamente
-- El módulo `battery` de Waybar está desactivado en WSL2
-- Añade `"interface": "eth0"` a `network_ip.json` para evitar el error RFKILL
-- Bordes redondeados no disponibles (SwayFX requiere acceso DRM directo)
+- XWayland NOT WORKING on WSLg
+- Apps X11 use XWayland de WSLg directly (Weston)
+- `battery` module of Waybar disabled en WSL2. 
+  - Activate if running on laptop
+- Add `"interface": "eth0"` to `network_ip.json` to avoid the RFKILL error
+- Rounded borders not available in WSL2 (SwayFX requiere acceso DRM directo)
 - Arranque: `sway-session` o `hyprland-session` desde la terminal WSL2
 
 ---
@@ -85,117 +135,13 @@ cp ~/tu-wallpaper.png ~/Pictures/wallpaper.png
 
 ---
 
-## Componentes
+## External Libs (auto downloaded)
 
-| Categoría        | Herramienta                          |
-|------------------|--------------------------------------|
-| WM               | Sway / Hyprland                      |
-| Bar              | Waybar (custom modules + xtra_menu)  |
-| Shell            | Zsh + Oh My Zsh + Powerlevel10k      |
-| Terminal         | Kitty / Foot                         |
-| Launcher         | Rofi                                 |
-| Notificaciones   | Dunst                                |
-| Wallpaper        | swaybg                               |
-| File Manager     | Thunar                               |
-| GTK Theme        | Adwaita-dark                         |
-| Icon Theme       | Papirus-Dark / Breeze / Kora         |
-| Cursor (X)       | Nordic-cursors                       |
-| Cursor (Hypr)    | Nordzy-cursors                       |
-| Fuente principal | Hack Nerd Font Propo                 |
-| Display Manager  | Ly (solo bare metal)                 |
-| Qt Theme         | Adwaita-Dark (qt6ct)                 |
-
----
-
-## Estructura
-
-```
-dotfiles/
-├── install.sh                      # Installer principal
-├── pack.sh                         # Empaquetador desde sistema fuente
-├── README.md
-│
-├── config/
-│   ├── sway/
-│   │   ├── config                  # Configuración Sway
-│   │   └── scripts/
-│   │       └── workspace_toggle.sh
-│   │
-│   ├── hypr/
-│   │   ├── hyprland.conf
-│   │   └── scripts/
-│   │       └── workspace_toggle.sh
-│   │
-│   ├── waybar/
-│   │   ├── config.jsonc
-│   │   ├── style.css
-│   │   ├── colors.css
-│   │   ├── launch.sh
-│   │   ├── conf/modules/           # Módulos JSON individuales
-│   │   │   ├── battery.json
-│   │   │   ├── date.json
-│   │   │   ├── logo.json
-│   │   │   ├── network_ip.json
-│   │   │   ├── status.json
-│   │   │   ├── sysmenu.json
-│   │   │   ├── workspaces.json
-│   │   │   └── xtra_func.json
-│   │   └── custom/
-│   │       └── xtra_menu/          # Menú custom Python/GTK
-│   │           ├── xtra_menu.py
-│   │           ├── xtra_menu.xml
-│   │           ├── xtra_menu.css
-│   │           └── xtra_menu_launcher.sh
-│   │
-│   ├── kitty/
-│   │   ├── kitty.conf
-│   │   └── color.ini
-│   │
-│   ├── foot/                       # Config foot terminal
-│   ├── dunst/                      # Notificaciones
-│   ├── rofi/                       # Launcher
-│   ├── gtk-3.0/
-│   │   ├── gtk.css
-│   │   ├── gtk-mine.css
-│   │   └── settings.ini
-│   ├── gtk-4.0/
-│   │   └── gtk.css
-│   └── qt6ct/
-│       └── qt6ct.conf
-│
-├── shell/
-│   ├── zshrc                       # ~/.zshrc
-│   ├── zshenv                      # ~/.zshenv
-│   └── p10k.zsh                    # ~/.p10k.zsh
-│
-├── scripts/
-│   ├── sway-session                # Wrapper WSL2 + bare metal
-│   └── hyprland-session            # Wrapper WSL2 + bare metal
-│
-├── fonts/                          # Fuentes adicionales (opcional)
-├── themes/
-│   ├── cursors/
-│   │   ├── Nordic-cursors/         # Xcursor (GTK/Sway)
-│   │   └── Nordzy-cursors/         # Hyprcursor (Hyprland)
-│   └── icons/
-│       └── Kora/                   # Kora icon theme (opcional)
-│
-├── wallpapers/
-│   └── wallpaper.png               # ⚠ Añadir manualmente
-│
-└── ly/
-    └── config.ini                  # Config Ly (solo bare metal)
-```
-
----
-
-## Dependencias externas (descarga automática)
-
-| Recurso          | Fuente                                          |
-|------------------|-------------------------------------------------|
-| Hack Nerd Font   | github.com/ryanoasis/nerd-fonts                 |
-| Nordic cursors   | github.com/EliverLara/Nordic                    |
-| Nordzy cursors   | github.com/alvatip/Nordzy-cursors               |
-| Kora icons       | github.com/bikass/kora                          |
-| Powerlevel10k    | github.com/romkatv/powerlevel10k                |
-| Oh My Zsh        | github.com/ohmyzsh/ohmyzsh                      |
+| Recurso        | Fuente                            |
+| -------------- | --------------------------------- |
+| Hack Nerd Font | github.com/ryanoasis/nerd-fonts   |
+| Nordic cursors | github.com/EliverLara/Nordic      |
+| Nordzy cursors | github.com/alvatip/Nordzy-cursors |
+| Kora icons     | github.com/bikass/kora            |
+| Powerlevel10k  | github.com/romkatv/powerlevel10k  |
+| Oh My Zsh      | github.com/ohmyzsh/ohmyzsh        |

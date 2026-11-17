@@ -1,0 +1,43 @@
+{
+    "layer": "top",
+    "position": "left",
+    "width": 0,
+    "spacing": 10,
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "reload_style_on_change": true,
+
+    "modules-left": ["hyprland/workspaces#left"],
+    "modules-center": ["wlr/taskbar"],
+    "modules-right": ["hyprland/window"],
+
+    "hyprland/workspaces#left": {
+        "active-only": false,
+        "all-outputs": true,
+        "on-click": "activate",
+        "format": "{icon}",
+        "format-icons": {
+            "active": "",
+            "default": ""
+        }
+    },
+
+    "wlr/taskbar": {
+        "format": "{icon}", //{title:.15}
+        "icon-size": 42,
+        "tooltip-format": "{title}",
+        "tooltip-border-radius": 5,
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "on-click-right": "minimize-raise",
+        "app_ids-mapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition"
+        }
+    },
+
+    "hyprland/window": {
+        "format": "{class}",
+        "max-length": 30
+    }
+}

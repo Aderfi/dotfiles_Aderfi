@@ -1,0 +1,47 @@
+# ~/.config/uwsm/env
+# Variables de entorno para Hyprland via UWSM/systemd
+# Fuente única de verdad — hyprland-session es solo fallback legacy.
+
+# ── XDG & Portals ────────────────────────────────────────────────
+export XDG_SESSION_TYPE="wayland"
+export XDG_CURRENT_DESKTOP="Hyprland"
+export XDG_SESSION_DESKTOP="Hyprland"
+export GTK_THEME="Adwaita:dark"
+export GTK_USE_PORTAL=1
+export COLOR_SCHEME="prefer-dark"
+
+# ── GPU: AMD iGPU compositor + NVIDIA offload ────────────────────
+# card0=AMD (compositor, batería), card1=NVIDIA (offload, gaming)
+export AQ_DRM_DEVICES="/dev/dri/card0:/dev/dri/card1"
+# NO setear GBM_BACKEND ni __GLX_VENDOR_LIBRARY_NAME globalmente:
+# con AMD como compositor, forzar nvidia-drm rompe el renderizado.
+# Para offload por app usar: __NV_PRIME_RENDER_OFFLOAD=1 app
+export NVD_BACKEND="direct"
+# export LIBVA_DRIVER_NAME="nvidia"  # disabled: nvidia-vaapi-driver 0.0.13 fails with driver 595.x
+export __GL_GSYNC_ALLOWED=1
+export __GL_VRR_ALLOWED=1
+
+# ── Browser ──────────────────────────────────────────────────────
+export MOZ_ENABLE_WAYLAND=1
+export MOZ_DISABLE_RDD_SANDBOX=1
+export ELECTRON_OZONE_PLATFORM_HINT="auto"
+
+# ── Toolkits (Wayland nativo) ───────────────────────────────────
+export EGL_PLATFORM="wayland"
+export GDK_BACKEND="wayland,x11,*"
+export QT_QPA_PLATFORM="wayland;xcb"
+export SDL_VIDEODRIVER="wayland"
+export CLUTTER_BACKEND="wayland"
+
+# ── Qt & Theming ─────────────────────────────────────────────────
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+export QT_QPA_PLATFORMTHEME="gtk3"
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# ── Cursors ──────────────────────────────────────────────────────
+export XCURSOR_THEME="Nordzy"
+export XCURSOR_SIZE=24
+
+# ── Misc ─────────────────────────────────────────────────────────
+export _JAVA_AWT_WM_NONREPARENTING=1
+export PROTON_ENABLE_WAYLAND=1

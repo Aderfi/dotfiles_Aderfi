@@ -18,10 +18,7 @@
         "format-wifi": "󰖩",
         "format-wifi-plus": "󱛃",
         "format-ethernet": "󰈀 Wired",
-        "format-disconnected": {
-            "wifi": "󰤮",
-            "ethernet": "󰈂"
-        },
+        "format-disconnected": "󰤮",
         "tooltip-format": "{ifname} via {gwaddr} 󰊗",
         "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
         "tooltip-format-ethernet": "{ifname} ",

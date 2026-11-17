@@ -1,0 +1,32 @@
+[Default Applications]
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/chrome=userapp-Zen-VT1RI3.desktop
+text/html=google-chrome.desktop
+application/x-extension-htm=userapp-Zen-VT1RI3.desktop
+application/x-extension-html=userapp-Zen-VT1RI3.desktop
+application/x-extension-shtml=userapp-Zen-VT1RI3.desktop
+application/xhtml+xml=userapp-Zen-VT1RI3.desktop
+application/x-extension-xhtml=userapp-Zen-VT1RI3.desktop
+application/x-extension-xht=userapp-Zen-VT1RI3.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+inode/directory=thunar.desktop
+application/x-wayland-gnome-saved-search=thunar.desktop
+image/png=feh.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/openclaw=openclaw-desktop-handler.desktop
+
+[Added Associations]
+x-scheme-handler/http=userapp-Zen-VT1RI3.desktop;userapp-Zen-S6CQI3.desktop;
+x-scheme-handler/https=userapp-Zen-VT1RI3.desktop;userapp-Zen-S6CQI3.desktop;
+x-scheme-handler/chrome=userapp-Zen-VT1RI3.desktop;userapp-Zen-S6CQI3.desktop;
+text/html=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+application/x-extension-htm=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+application/x-extension-html=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+application/x-extension-shtml=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+application/xhtml+xml=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+application/x-extension-xhtml=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+application/x-extension-xht=userapp-Zen-S6CQI3.desktop;userapp-Zen-VT1RI3.desktop;
+text/plain=org.gnome.TextEditor.desktop;
+image/png=feh.desktop;

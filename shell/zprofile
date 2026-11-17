@@ -1,0 +1,30 @@
+# ~/.zprofile — Ejecutado en login shells (antes de .zshrc)
+# Uso: variables de entorno de sesión, PATH, arranque de agentes.
+# NO poner aquí aliases ni funciones (eso va en .zshrc).
+
+# ── PATH ─────────────────────────────────────────────────────────
+export PATH="$HOME/.local/bin:$HOME/bin:/usr/local/bin:$PATH"
+
+# Cargo (Rust)
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# ── XDG Base Directories ─────────────────────────────────────────
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+# ── Editor & Pager ───────────────────────────────────────────────
+export EDITOR="code --wait"
+export VISUAL="code --wait"
+export PAGER="less"
+export LESS="-R --use-color"
+
+# ── Locale ───────────────────────────────────────────────────────
+export LANG="es_ES.UTF-8"
+export LC_ALL="es_ES.UTF-8"
+
+# ── SSH Agent ────────────────────────────────────────────────────
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null 2>&1
+fi

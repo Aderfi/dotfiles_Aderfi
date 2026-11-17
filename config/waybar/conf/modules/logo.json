@@ -3,6 +3,6 @@
         "format": "",
         "min-length": 0,
         "tooltip": true,
-        "on-click": "wofi --show drun --normal-window",
+        "on-click": "wofi --show drun --normal-window"
         }
 }

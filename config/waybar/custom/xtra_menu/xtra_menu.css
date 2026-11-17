@@ -68,11 +68,8 @@
  * ────────────────────────────────────────────────────────────────────────────── */
 
 window#main_window {
-    /*
-     * background-image acepta gradientes CSS estándar en GTK3.
-     * 'circle' explícito evita warnings en GTK3 < 3.22.
-     */
-    background-image: radial-gradient(circle, crimson, skyblue);
+    background-color: rgba(18, 18, 18, 0.92);
+    border-radius: 12px;
 }
 
 
@@ -141,9 +138,8 @@ scale trough slider:active {
  * Overrides individuales por slider — descomentar si se necesitan.
  * Selector correcto: scale#id trough highlight
  */
-scale#slider_brightness trough highlight{
-    background-image: none;
-    background-image: linear-gradient(to right, @red, @red);
+scale#slider_brightness trough highlight {
+    background-image: linear-gradient(to right, @greshade5, @yellow);
 }
  /* scale#slider_volume trough highlight {
  *     background-image: linear-gradient(to right, @green, @cyan);
@@ -254,14 +250,6 @@ button.grid-btn:checked {
     box-shadow: none;
 }
 
-button:checked{    /* Heredan las propiedades base de .grid-btn, solo override lo necesario */
-    background: none;
-    color: transparent;
-}
-
-button#btn_2:active label {
-    color:greenyellow;
-}
 
 /* ──────────────────────────────────────────────────────────────────────────────
  * TOGGLES — estado INACTIVO (estilos específicos por botón en reposo)

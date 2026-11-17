@@ -220,7 +220,7 @@ fi
 
 # ════════════════════════════════════════════════════════════
 step "Comprobando secretos"
-SECRET_RE='(gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(token|secret|passw(or)?d|api_?key)[A-Za-z_]*[[:space:]]*[=:][[:space:]]*["'"'"']?[A-Za-z0-9_-]{16,})'
+SECRET_RE='(gh[pousr]_[A-Za-z0-9]{20,}|(^|[^A-Za-z0-9])sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(token|secret|passw(or)?d|api_?key)[A-Za-z_]*[[:space:]]*[=:][[:space:]]*["'"'"']?[A-Za-z0-9_-]{16,})'
 SECRETS_FOUND=false
 scan_dirs=()
 for d in shell config git scripts ly; do [[ -d "$DOTFILES/$d" ]] && scan_dirs+=("$DOTFILES/$d"); done
